@@ -54,15 +54,17 @@ class Keyboard extends StatelessWidget {
                             final Alphabet tileInBag =
                                 scrabbleTiles.firstWhere((element) => element.letter == e, orElse: () => Alphabet(letter: ' '));
 
-                            if (tileInBag.bgColor == Colors.grey) {}
-
-                            return Flexible(
-                              child: _KeyboardButton(
-                                letter: e,
-                                backgroundColor: tileInBag.letter != ' ' ? tileInBag.bgColor : Colors.grey,
-                                onPressed: () => onKey(e),
-                              ),
-                            );
+                            if (tileInBag.bgColor == Colors.grey) {
+                              return const Spacer();
+                            } else {
+                              return Flexible(
+                                child: _KeyboardButton(
+                                  letter: e,
+                                  backgroundColor: tileInBag.letter != ' ' ? tileInBag.bgColor : Colors.grey,
+                                  onPressed: () => onKey(e),
+                                ),
+                              );
+                            }
                         }
                       }).toList(),
                     ),
