@@ -118,13 +118,13 @@ class _HomePageState extends State<HomePage> {
     if (event is KeyUpEvent) {
       if (event.logicalKey == LogicalKeyboardKey.enter) {
         _onEnter;
-        return KeyEventResult.handled;
+        return KeyEventResult.ignored;
       } else if (event.logicalKey == LogicalKeyboardKey.backspace) {
         _onBackspace;
-        return KeyEventResult.handled;
+        return KeyEventResult.ignored;
       } else {
         _onKey(event.logicalKey.keyLabel);
-        return KeyEventResult.handled;
+        return KeyEventResult.ignored;
       }
     }
     return KeyEventResult.ignored;
