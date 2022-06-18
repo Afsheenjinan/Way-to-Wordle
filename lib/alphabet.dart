@@ -5,6 +5,9 @@ class Alphabet {
   Color bgColor = Colors.transparent;
 
   Alphabet({required this.letter});
+
+  @override
+  toString() => letter;
 }
 
 extension ModifedString on String {
@@ -15,7 +18,7 @@ extension ModifedString on String {
   List<Alphabet> toAlphabetList() {
     List<Alphabet> list = [];
 
-    for (var letter in split('')) {
+    for (String letter in split('')) {
       list.add(Alphabet(letter: letter));
     }
 

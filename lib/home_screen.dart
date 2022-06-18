@@ -83,12 +83,12 @@ class _HomePageState extends State<HomePage> {
 
   void _onEnter() {
     if (_currentword.contains(' ')) return;
-    print(_rowIndex);
+    print('_row $_rowIndex');
     // if (_rowIndex >= _rowLength) return;
 
     List<Alphabet> alphabetList = _currentword.toAlphabetList();
 
-    for (var i = 0; i < _letterCount; i++) {
+    for (int i = 0; i < _letterCount; i++) {
       if (_currentword[i] == _reference[i]) {
         alphabetList[i].bgColor = Colors.green;
         _bag.add(alphabetList[i]);
@@ -107,6 +107,7 @@ class _HomePageState extends State<HomePage> {
       }
     }
     _list[_rowIndex] = alphabetList;
+    print(_list);
 
     if (_currentword != _reference) {
       _currentword = ' ' * _letterCount;
@@ -137,7 +138,7 @@ class _HomePageState extends State<HomePage> {
 
   void _onAtoZ(String val) {
     if (_columnIndex >= _letterCount) return;
-    if (_rowIndex > 5) return;
+    if (_rowIndex >= _rowLength) return;
 
     _currentword = _currentword.replacewith(_columnIndex, val);
     _list[_rowIndex] = _currentword.toAlphabetList();
