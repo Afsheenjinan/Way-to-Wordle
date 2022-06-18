@@ -1,4 +1,4 @@
-List<String> fiveLetterWords = [
+Iterable<String> $5letterWords = [
   "AARGH",
   "ABACA",
   "ABACI",

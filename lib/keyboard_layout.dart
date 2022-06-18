@@ -6,7 +6,7 @@ import 'package:wordle_clone/alphabet.dart';
 //   [' ', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ' ', '←'],
 //   [' ', ' ', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ' ', '↩'],
 // ];
-const _layout = [
+const layout = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '←'],
   [' ', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ' ', ' '],
   [' ', ' ', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ' ', '↩'],
@@ -22,59 +22,56 @@ class Keyboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 528),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: _layout
-                .map(
-                  (row) => SizedBox(
-                    height: 32,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: row.map((e) {
-                        switch (e) {
-                          case '←':
-                            return Flexible(
-                              flex: 1,
-                              child: _KeyboardButton(letter: e, backgroundColor: Colors.red, onPressed: onDelete),
-                            );
+    return ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 528),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: layout
+              .map(
+                (row) => SizedBox(
+                  height: 32,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: row.map((e) {
+                      switch (e) {
+                        case '←':
+                          return Flexible(
+                            flex: 1,
+                            child: _KeyboardButton(letter: e, backgroundColor: Colors.red, onPressed: onDelete),
+                          );
 
-                          case '↩':
-                            return Flexible(
-                              flex: 2,
-                              child: _KeyboardButton(letter: e, backgroundColor: Colors.green, onPressed: onEnter),
-                            );
-                          case ' ':
+                        case '↩':
+                          return Flexible(
+                            flex: 2,
+                            child: _KeyboardButton(letter: e, backgroundColor: Colors.green, onPressed: onEnter),
+                          );
+                        case ' ':
+                          return const Spacer();
+
+                        default:
+                          final Alphabet tileInBag = scrabbleTiles.firstWhere((element) => element.letter == e, orElse: () => Alphabet(letter: ' '));
+
+                          if (tileInBag.bgColor == Colors.grey) {
                             return const Spacer();
-
-                          default:
-                            final Alphabet tileInBag =
-                                scrabbleTiles.firstWhere((element) => element.letter == e, orElse: () => Alphabet(letter: ' '));
-
-                            if (tileInBag.bgColor == Colors.grey) {
-                              return const Spacer();
-                            } else {
-                              return Flexible(
-                                child: _KeyboardButton(
-                                  letter: e,
-                                  backgroundColor: tileInBag.letter != ' ' ? tileInBag.bgColor : Colors.grey,
-                                  onPressed: () => onKey(e),
-                                ),
-                              );
-                            }
-                        }
-                      }).toList(),
-                    ),
+                          } else {
+                            return Flexible(
+                              child: _KeyboardButton(
+                                letter: e,
+                                backgroundColor: tileInBag.letter != ' ' ? tileInBag.bgColor : Colors.grey,
+                                onPressed: () => onKey(e),
+                              ),
+                            );
+                          }
+                      }
+                    }).toList(),
                   ),
-                )
-                .toList(),
-          ),
+                ),
+              )
+              .toList(),
         ),
-        const SizedBox(height: 20)
-      ],
+      ),
     );
   }
 }
