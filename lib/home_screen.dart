@@ -161,12 +161,9 @@ class _HomePageState extends State<HomePage> {
 
   Widget _popupDialog(BuildContext context, {bool won = false}) {
     return AlertDialog(
-      // title: const Text('Statistics'),
       elevation: 32,
-      // actionsAlignment: MainAxisAlignment.center,
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        // crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           won ? Text('${winCommands.elementAt(Random().nextInt(winCommands.length))} !') : const Text('You Can do Better !'),
           const Divider(height: 24),
