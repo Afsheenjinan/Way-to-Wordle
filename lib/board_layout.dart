@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'alphabet.dart';
 
@@ -38,7 +37,7 @@ class _TileState extends State<_Tile> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    print('_controller init - ${widget.alphabet.letter}');
+    // print('_controller init - ${widget.alphabet.letter}');
 
     _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _animation = Tween(begin: 0.0, end: 2 * pi).animate(CurvedAnimation(parent: _controller, curve: Curves.linear))
@@ -47,17 +46,20 @@ class _TileState extends State<_Tile> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    super.dispose();
     _controller
       ..removeListener(() {})
       ..dispose();
-    print('_controller disposed - ${widget.alphabet.letter}');
+    super.dispose();
+    // print('_controller disposed - ${widget.alphabet.letter}');
   }
 
   @override
   Widget build(BuildContext context) {
+    _controller.reverse();
+
     if (widget.alphabet.bgColor != Colors.transparent) _controller.forward();
-    if (_controller.value > 0.25 && _controller.value < 0.75) _controller.forward(from: 0.75);
+    if (_controller.value > 0.25 && _controller.value < 0.5) _controller.forward(from: 0.75);
+    if (_controller.value > 0.5 && _controller.value < 0.75) _controller.reverse(from: 0.25);
     return Transform(
       alignment: Alignment.center,
       transform: Matrix4.identity()

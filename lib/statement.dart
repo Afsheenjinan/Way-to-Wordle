@@ -1,4 +1,4 @@
-List<String> winCommands = [
+Iterable<String> winCommands = [
   "Ace",
   "Admirable",
   "Awesome",
