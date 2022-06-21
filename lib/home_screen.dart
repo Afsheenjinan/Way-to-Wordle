@@ -1,17 +1,16 @@
-import 'dart:convert';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:wordle_clone/board_layout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'alphabet.dart';
-import 'charts.dart';
-import 'keyboard_layout.dart';
-import 'statement.dart';
-import 'word_5_list.dart';
-import 'word_6_list.dart';
-import 'word_7_list.dart';
+import 'models/alphabet.dart';
+import 'layouts/board_layout.dart';
+import 'layouts/keyboard_layout.dart';
+
+import 'data/word_5_list.dart';
+import 'data/word_6_list.dart';
+import 'data/word_7_list.dart';
+import 'widgets/popup_dialog.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -32,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   late List<List<Alphabet>> _list;
   late Set<Alphabet> _bag;
   late Map<int, int> _winMap;
-  late int _lostCount, _winCount;
+  late int _lostCount, _winCount, _streak, _maxStreak;
 
   late int _letterCount, _rowLength;
   late String _currentword, _reference;
@@ -51,23 +50,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _winMap = _decode(widget.snapshot.data?.getString('winCount') ?? _encode({1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}));
-    _winCount = _winMap.keys.reduce((value, element) => value + element);
-
-    _lostCount = widget.snapshot.data?.getInt('lostCount') ?? 0;
-    print('_lostCount : $_lostCount');
-    print('_winCount : $_winMap');
-
     _letterCount = _isButtonSelected.indexOf(true) + 5;
-    _rowLength = 3;
+    _rowLength = 6;
+
     _restart();
     super.initState();
-  }
-
-  String _encode(Map<int, int> intMap) => jsonEncode(intMap.map((key, value) => MapEntry(key.toString(), value)));
-  Map<int, int> _decode(String jsonString) {
-    Map<String, dynamic> qwe = jsonDecode(jsonString);
-    return qwe.map<int, int>((key, value) => MapEntry(int.parse(key), value));
   }
 
   void _restart() {
@@ -75,6 +62,13 @@ class _HomePageState extends State<HomePage> {
     _columnIndex = 0;
     _bag = {};
     _list = [];
+
+    _winMap = decode(widget.snapshot.data?.getString('winCount $_letterCount') ?? encode({1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0}));
+    _winCount = _winMap.values.reduce((value, element) => value + element);
+    _lostCount = widget.snapshot.data?.getInt('lostCount $_letterCount') ?? 0;
+
+    _streak = widget.snapshot.data?.getInt('streak $_letterCount') ?? 0;
+    _maxStreak = widget.snapshot.data?.getInt('maxStreak $_letterCount') ?? 0;
 
     switch (_letterCount) {
       case 5:
@@ -88,12 +82,10 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
     }
-    // _list.add(_currentword.toAlphabetList());
-    setState(() {
-      _currentword = ' ' * _letterCount;
-      _list = [..._list, _currentword.toAlphabetList()];
-    });
-    print(_reference);
+    _currentword = ' ' * _letterCount;
+    _list.add(_currentword.toAlphabetList());
+    setState(() {});
+    // print(_reference);
   }
 
   void _onEnter() {
@@ -113,6 +105,8 @@ class _HomePageState extends State<HomePage> {
         alphabetList[i].bgColor = Colors.grey;
       }
 
+      alphabetList[i].rotation = true;
+
       final Alphabet tileInBag = _bag.firstWhere((e) => e.letter == _currentword[i], orElse: () => Alphabet(letter: ' '));
 
       if (tileInBag.bgColor != Colors.green) {
@@ -126,36 +120,64 @@ class _HomePageState extends State<HomePage> {
     if (_currentword != _reference) {
       _currentword = ' ' * _letterCount;
       if (_rowIndex < _rowLength - 1) {
-        // _list.add(_currentword.toAlphabetList());
-        setState(() {
-          _list = [..._list, _currentword.toAlphabetList()];
-        });
+        _list.add(_currentword.toAlphabetList());
       } else {
-        setState(() {
-          _lostCount++;
-        });
-        widget.snapshot.data?.setInt('lostCount', _lostCount);
-        showDialog(context: context, builder: (context) => _popupDialog(context), barrierDismissible: false);
+        setState(() => _lostCount++);
+        widget.snapshot.data?.setInt('lostCount $_letterCount', _lostCount);
+        if (_streak > _maxStreak) _maxStreak = _streak;
+        _streak = 0;
+        widget.snapshot.data?.setInt('streak $_letterCount', _streak);
+        widget.snapshot.data?.setInt('maxStreak $_letterCount', _maxStreak);
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => popupDialog(context,
+              letterCount: _letterCount,
+              lostCount: _lostCount,
+              winCount: _winCount,
+              streak: _streak,
+              maxStreak: _maxStreak,
+              winMap: _winMap,
+              list: _list,
+              reference: _reference,
+              action: _restart),
+        );
       }
     } else {
       _winMap[_rowIndex + 1] = _winMap[_rowIndex + 1]! + 1;
-      setState(() {
-        _winCount++;
-      });
-      widget.snapshot.data?.setString('winCount', _encode(_winMap));
+      setState(() => _winCount++);
+      widget.snapshot.data?.setString('winCount $_letterCount', encode(_winMap));
+      _streak++;
+      if (_streak > _maxStreak) _maxStreak = _streak;
+      widget.snapshot.data?.setInt('streak $_letterCount', _streak);
+      widget.snapshot.data?.setInt('maxStreak $_letterCount', _maxStreak);
 
-      showDialog(context: context, builder: (context) => _popupDialog(context, won: true), barrierDismissible: false);
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => popupDialog(
+          context,
+          letterCount: _letterCount,
+          lostCount: _lostCount,
+          winCount: _winCount,
+          streak: _streak,
+          maxStreak: _maxStreak,
+          winMap: _winMap,
+          list: _list,
+          won: true,
+          action: _restart,
+        ),
+      );
     }
 
-    _rowIndex += 1;
+    _rowIndex++;
     _columnIndex = 0;
     setState(() {});
   }
 
   void _onBackspace() {
     if (_columnIndex <= 0) return;
-
-    _columnIndex -= 1;
+    _columnIndex--;
     _currentword = _currentword.replacewith(_columnIndex, ' ');
     _list[_rowIndex] = _currentword.toAlphabetList();
     setState(() {});
@@ -185,61 +207,28 @@ class _HomePageState extends State<HomePage> {
     // return KeyEventResult.handled;
   }
 
-  Widget _popupDialog(BuildContext context, {bool won = false}) {
-    return AlertDialog(
-      elevation: 32,
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          won ? Text('${winCommands.elementAt(Random().nextInt(winCommands.length))} !') : const Text('You Can do Better !'),
-          const Divider(height: 24),
-          // const SizedBox(height: 10),
-          Row(
-            children: [
-              PieChart(winCount: _winCount, lostCount: _lostCount, radius: 100),
-              const SizedBox(width: 20),
-              Column(children: List.generate(6, (index) => Text((index + 1).toString()), growable: false).reversed.toList()),
-              const SizedBox(width: 20),
-              BarChart(map: _winMap)
-            ],
-          ),
-          const Divider(),
-        ],
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            _restart();
-          },
-          child: Text(won ? 'New Game' : 'Try Again'),
-        ),
-      ],
-    );
+  void _changeDifficulty(index) {
+    int oldIndex = _isButtonSelected.indexOf(true);
+    if (oldIndex != index) {
+      _isButtonSelected[oldIndex] = false;
+      _isButtonSelected[index] = true;
+      _letterCount = index + 5;
+      _restart();
+      setState(() {});
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // print('build');
     return KeyboardListener(
       focusNode: _node,
       autofocus: true,
       onKeyEvent: _onKeyEvent,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'WORDLE\nin a Minute',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: Colors.black),
-          ),
+          title: const Text('Guess The Word', textAlign: TextAlign.center),
           actions: [
-            IconButton(
-                onPressed: _restart,
-                icon: const Icon(
-                  Icons.restart_alt_rounded,
-                  color: Colors.orange,
-                  size: 32,
-                )),
+            IconButton(onPressed: _restart, icon: const Icon(Icons.restart_alt_rounded, color: Colors.orange, size: 32)),
             const SizedBox(width: 10)
           ],
           centerTitle: true,
@@ -250,6 +239,7 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              const SizedBox(height: 20),
               ToggleButtons(
                 fillColor: Colors.transparent,
                 borderRadius: BorderRadius.circular(5.0),
@@ -258,25 +248,15 @@ class _HomePageState extends State<HomePage> {
                 isSelected: _isButtonSelected,
                 children: const [Text('5 Letters'), Text('6 Letters'), Text('7 Letters')],
               ),
-              const Spacer(),
-              Board(keys: _list),
-              const Spacer(),
+              const SizedBox(height: 20),
+
+              Expanded(child: Board(keys: _list)),
+              // const Spacer(),
               Keyboard(onEnter: _onEnter, onDelete: _onBackspace, onKey: _onAtoZ, scrabbleTiles: _bag),
             ],
           ),
         ),
       ),
     );
-  }
-
-  void _changeDifficulty(index) {
-    int oldIndex = _isButtonSelected.indexOf(true);
-    if (oldIndex != index) {
-      _isButtonSelected[oldIndex] = false;
-      _isButtonSelected[index] = true;
-      _letterCount = index + 5;
-      _restart();
-      setState(() {});
-    }
   }
 }

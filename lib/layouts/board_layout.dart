@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'alphabet.dart';
+import '../models/alphabet.dart';
 
 class Board extends StatelessWidget {
   const Board({Key? key, required this.keys}) : super(key: key);
@@ -10,14 +10,19 @@ class Board extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: keys
-          .map((row) => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: row.map((e) => _Tile(alphabet: e)).toList(),
-              ))
-          .toList(),
+    return Center(
+      child: SingleChildScrollView(
+        reverse: true,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: keys
+              .map((row) => Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: row.map((e) => _Tile(alphabet: e)).toList(),
+                  ))
+              .toList(),
+        ),
+      ),
     );
   }
 }
@@ -36,12 +41,10 @@ class _TileState extends State<_Tile> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    super.initState();
-    // print('_controller init - ${widget.alphabet.letter}');
-
     _controller = AnimationController(vsync: this, duration: const Duration(seconds: 1));
     _animation = Tween(begin: 0.0, end: 2 * pi).animate(CurvedAnimation(parent: _controller, curve: Curves.linear))
       ..addListener(() => setState(() {}));
+    super.initState();
   }
 
   @override
@@ -50,16 +53,19 @@ class _TileState extends State<_Tile> with TickerProviderStateMixin {
       ..removeListener(() {})
       ..dispose();
     super.dispose();
-    // print('_controller disposed - ${widget.alphabet.letter}');
   }
 
   @override
   Widget build(BuildContext context) {
-    _controller.reverse();
+    if (widget.alphabet.rotation) {
+      if (_controller.status != AnimationStatus.completed) {
+        _controller.forward();
 
-    if (widget.alphabet.bgColor != Colors.transparent) _controller.forward();
-    if (_controller.value > 0.25 && _controller.value < 0.5) _controller.forward(from: 0.75);
-    if (_controller.value > 0.5 && _controller.value < 0.75) _controller.reverse(from: 0.25);
+        if (_controller.value > 0.25 && _controller.value < 0.75) _controller.forward(from: 0.75);
+      }
+    } else {
+      _controller.reset();
+    }
     return Transform(
       alignment: Alignment.center,
       transform: Matrix4.identity()

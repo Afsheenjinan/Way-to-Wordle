@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wordle_clone/alphabet.dart';
+import 'package:wordle_clone/models/alphabet.dart';
 
-// const _layout = [
-//   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', ' '],
-//   [' ', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ' ', '←'],
-//   [' ', ' ', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ' ', '↩'],
-// ];
 const layout = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '←'],
   [' ', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ' ', ' '],
@@ -87,14 +82,18 @@ class _KeyboardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(3),
+      padding: const EdgeInsets.all(2.5),
       child: Material(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(5),
         child: InkWell(
           onTap: onPressed,
           child: SizedBox(
-            child: Center(child: Text(letter)),
+            child: Center(
+                child: Text(
+              letter,
+              style: const TextStyle(fontWeight: FontWeight.w500),
+            )),
           ),
         ),
       ),
