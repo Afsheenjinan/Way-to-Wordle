@@ -224,36 +224,38 @@ class _HomePageState extends State<HomePage> {
       focusNode: _node,
       autofocus: true,
       onKeyEvent: _onKeyEvent,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Guess The Word', textAlign: TextAlign.center),
-          actions: [
-            IconButton(onPressed: _restart, icon: const Icon(Icons.restart_alt_rounded, color: Colors.orange, size: 32)),
-            const SizedBox(width: 10)
-          ],
-          centerTitle: true,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(height: 20),
-              ToggleButtons(
-                fillColor: Colors.transparent,
-                borderRadius: BorderRadius.circular(5.0),
-                constraints: const BoxConstraints(minHeight: 24.0, minWidth: 72, maxWidth: 120),
-                onPressed: _changeDifficulty,
-                isSelected: _isButtonSelected,
-                children: const [Text('5 Letters'), Text('6 Letters'), Text('7 Letters')],
-              ),
-              const SizedBox(height: 20),
-
-              Expanded(child: Board(keys: _list)),
-              // const Spacer(),
-              Keyboard(onEnter: _onEnter, onDelete: _onBackspace, onKey: _onAtoZ, scrabbleTiles: _bag),
+      child: SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Guess The Word', textAlign: TextAlign.center),
+            actions: [
+              IconButton(onPressed: _restart, icon: const Icon(Icons.restart_alt_rounded, color: Colors.orange, size: 32)),
+              const SizedBox(width: 10)
             ],
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const SizedBox(height: 20),
+                ToggleButtons(
+                  fillColor: Colors.transparent,
+                  borderRadius: BorderRadius.circular(5.0),
+                  constraints: const BoxConstraints(minHeight: 24.0, minWidth: 72, maxWidth: 120),
+                  onPressed: _changeDifficulty,
+                  isSelected: _isButtonSelected,
+                  children: const [Text('5 Letters'), Text('6 Letters'), Text('7 Letters')],
+                ),
+                const SizedBox(height: 20),
+
+                Expanded(child: Board(keys: _list)),
+                // const Spacer(),
+                Keyboard(onEnter: _onEnter, onDelete: _onBackspace, onKey: _onAtoZ, scrabbleTiles: _bag),
+              ],
+            ),
           ),
         ),
       ),
