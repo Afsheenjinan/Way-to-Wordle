@@ -1,28 +1,30 @@
-import 'dart:io';
-
 // import 'package:device_preview/device_preview.dart';
-import 'package:device_preview_screenshot/device_preview_screenshot.dart';
+// import 'package:device_preview_screenshot/device_preview_screenshot.dart';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'home_screen.dart';
 
-const bool debugMode = !bool.fromEnvironment('dart.vm.product');
+// const bool debugMode = bool.fromEnvironment('dart.vm.product');
+
+// void main() {
+//   runApp(debugMode
+//       ? DevicePreview(
+//           enabled: debugMode,
+//           builder: (context) => const MyApp(),
+//           tools: [
+//             DevicePreviewScreenshot(
+//               onScreenshot: screenshotAsFiles(Directory(r'C:\Users\Ali\Desktop\')),
+//             ),
+//             ...DevicePreview.defaultTools,
+//           ],
+//         )
+//       : const MyApp());
+// }
 
 void main() {
-  runApp(debugMode
-      ? DevicePreview(
-          enabled: debugMode,
-          builder: (context) => const MyApp(),
-          tools: [
-            DevicePreviewScreenshot(
-              onScreenshot: screenshotAsFiles(Directory(r'C:\Users\Ali\Desktop\')),
-            ),
-            ...DevicePreview.defaultTools,
-          ],
-        )
-      : const MyApp());
+  const MyApp();
 }
 
 class MyApp extends StatelessWidget {
@@ -33,11 +35,11 @@ class MyApp extends StatelessWidget {
     Future<SharedPreferences> sharedPreferences = _getSharedPreferences();
 
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      useInheritedMediaQuery: debugMode ? true : false,
-      locale: debugMode ? DevicePreview.locale(context) : null,
-      builder: debugMode ? DevicePreview.appBuilder : null,
-      title: 'WORDLE in a Minute',
+      // debugShowCheckedModeBanner: false,
+      // useInheritedMediaQuery: debugMode ? true : false,
+      // locale: debugMode ? DevicePreview.locale(context) : null,
+      // builder: debugMode ? DevicePreview.appBuilder : null,
+      title: 'Guess The Word | WORDLE',
       themeMode: ThemeMode.system,
       theme: ThemeData.light().copyWith(
           appBarTheme:
