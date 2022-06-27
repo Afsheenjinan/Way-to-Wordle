@@ -6,7 +6,7 @@
     Way to Words
 </h2>
 
-![Downloads badge][downloads badge] [downloads badge pretty] 
+![Downloads badge][downloads badge] ![downloads badge pretty] [downloads badge pretty] 
 
 ![Ratings badge][ratings badge] ![Ratings badge pretty][ratings badge pretty] 
 
