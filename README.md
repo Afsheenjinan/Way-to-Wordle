@@ -1,5 +1,6 @@
 <div align="center">
-    <img alt="Icon" src="app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png" width="200" />
+main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
+    <img alt="Icon" src="main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="200" />
 </div>
 
 # Way to Wordle
