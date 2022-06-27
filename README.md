@@ -1,6 +1,6 @@
 <div align="center">
 main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png
-    <img alt="App Icon" src="android/app/src/main/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="200" />
+    <img alt="App Icon" src="android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="200" />
 </div>
 
 <h2 align="center">
