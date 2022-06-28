@@ -22,10 +22,13 @@ Way to Wordle is a trainer app to familiarize with words to gain high score in [
 # Store Presence
 
 <div align="center">
+
 Our app is now available on Google Play
+
 <a href='https://play.google.com/store/apps/details?id=com.bhive.waytowordle'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="200"/></a>
 
 <sub>Google Play and the Google Play logo are trademarks of Google LLC.</sub>
+
 </div>
 
 
