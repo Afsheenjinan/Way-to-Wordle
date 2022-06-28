@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wordle_clone/models/alphabet.dart';
+import 'package:waytowordle/models/alphabet.dart';
 
 const layout = [
   ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '←'],

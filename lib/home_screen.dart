@@ -227,7 +227,7 @@ class _HomePageState extends State<HomePage> {
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
-            title: const Text('Guess The Word', textAlign: TextAlign.center),
+            title: const Text('Way to Words', textAlign: TextAlign.center),
             actions: [
               IconButton(onPressed: _restart, icon: const Icon(Icons.restart_alt_rounded, color: Colors.orange, size: 32)),
               const SizedBox(width: 10)

@@ -1,6 +1,6 @@
 {
-    "name": "wordle_clone",
-    "short_name": "wordle_clone",
+    "name": "waytowordle",
+    "short_name": "waytowordle",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

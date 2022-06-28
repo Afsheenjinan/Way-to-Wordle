@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
       // useInheritedMediaQuery: debugMode ? true : false,
       // locale: debugMode ? DevicePreview.locale(context) : null,
       // builder: debugMode ? DevicePreview.appBuilder : null,
-      title: 'Guess The Word | WORDLE',
+      title: 'Way to Words',
       themeMode: ThemeMode.system,
       theme: ThemeData.light().copyWith(
           appBarTheme:

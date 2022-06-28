@@ -1,4 +1,4 @@
-package com.bhive.wordle_clone
+package com.bhive.waytowordle
 
 import io.flutter.embedding.android.FlutterActivity
 

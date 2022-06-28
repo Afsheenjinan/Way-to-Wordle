@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bhive.wordle_clone">
+    package="com.bhive.waytowordle">
    <application
-        android:label="Way to Wordle"
+        android:label="Way to Words"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
